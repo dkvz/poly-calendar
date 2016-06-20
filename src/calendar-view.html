@@ -1,0 +1,134 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="calendar-view">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 16px 0;
+        color: #212121;
+      }
+      .mark {
+        margin-right: 10px;
+        padding-right: 10px;
+        border-right: solid 2px black;
+      }
+    </style>
+    
+    <style is="custom-style" include="shared-styles"></style>
+
+    <iron-ajax url="data.json" last-response="{{data}}" on-response="saveOriginalData" auto></iron-ajax>
+    
+    <iron-list items="[[reducedData]]" as="item" grid style="width: 100%" id="theList">
+      <template>
+        <paper-menu style="width: 600px">
+          <paper-item><h1>[[item.day]]</h1></paper-item>
+          <paper-item><span class="mark">7 AM</span>[[item.7am]]</paper-item>
+          <paper-item><span class="mark">8 AM</span>[[item.8am]]</paper-item>
+          <paper-item><span class="mark">9 AM</span>[[item.9am]]</paper-item>
+          <paper-item><span class="mark">10 AM</span>[[item.10am]]</paper-item>
+          <paper-item><span class="mark">11 AM</span>[[item.11am]]</paper-item>
+          <paper-item><span class="mark">12 AM</span>[[item.12am]]</paper-item>
+          <paper-item><span class="mark">1 PM</span>[[item.1pm]]</paper-item>
+          <paper-item><span class="mark">2 PM</span>[[item.2pm]]</paper-item>
+        </paper-menu>
+      </template>
+    </iron-list>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'calendar-view',
+      
+      properties: {
+
+        data: {
+          type: Array,
+          notify: true,
+          observer: '_dataChanged'
+        },
+        originalData: {
+          type: Array,
+          notify: true
+        },
+        reducedData: {
+          type: Array,
+          notify: true
+        },
+        listItemWidth: {
+          type: Number,
+          notify: true,
+          value: 600
+        }
+
+      },
+      
+      attached: function() {
+        console.log('Attached has been called.');
+        this.$.theList.addEventListener('iron-resize', this._onListResize.bind(this));
+      },
+      _onListResize: function(e) {
+        console.log('List resized fired.');
+        var w = e.target.offsetWidth;
+        // We need to determine how much we can resize here.
+        // And take a certain percentage as security.
+        var ratio = Math.floor(w / this.listItemWidth);
+        console.log('Found ratio: ' + ratio);
+        if (ratio >= 1) {
+          var max = ratio;
+          if (max > this.originalData.length) {
+            max = this.originalData.length;
+          }
+          console.log('Going up to ' + max);
+          var nd = new Array();
+          for (var i = 0; i < max; i++) {
+            nd.push(this.originalData[i]);
+          }
+          this.data = nd;
+          this.reducedData = nd;
+        }
+      },
+      _dataChanged: function() {
+        console.log('Data changed fired.');
+      },
+      saveOriginalData: function(e) {
+        this.originalData = new Array();
+        this.reducedData = new Array();
+        for (var i = 0; i < e.detail.response.length; i++) {
+          this.originalData.push(e.detail.response[i]);
+          this.reducedData.push(e.detail.response[i]);
+        }
+        // Fire resize event:
+        this.$.theList.notifyResize();
+      }
+
+    });
+
+  </script>
+
+</dom-module>
