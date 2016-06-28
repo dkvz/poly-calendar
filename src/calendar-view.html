@@ -46,10 +46,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         box-sizing: border-box;
         padding: 16px;
       }
+      .timeColumn {
+        
+      }
+      .titleColumn {
+        font-weight: bolder;
+        text-align: right;
+      }
+      div.timeColumn div {
+        margin-top: 26px;
+      }
+      .time {
+        border-bottom: 2px solid silver;
+      }
+      .time30 {
+        border-bottom: 4px solid silver;
+      }
       
       @media (max-width: 600px) {
         .dayTab {
           width: 100%;
+          margin: 0px;
+        }
+        .timeTab {
+          width: 100px;
           margin: 0px;
         }
       }
@@ -57,6 +77,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @media (min-width: 601px) {
         .dayTab {
           width: 300px;
+          margin: 8px;
+        }
+        .timeTab {
+          width: 150px;
           margin: 8px;
         }
       }
@@ -67,20 +91,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-ajax url="data.json" last-response="{{data}}" on-response="saveOriginalData" auto></iron-ajax>
     
-    <div id="listArea" class="layout around-justified horizontal">
-      <template is="dom-repeat" items="{{reducedData}}">
+    <div id="listArea" class="layout left-justified horizontal">
+      <paper-material class="timeTab" elevation="4">
+        <h1>&nbsp;</h1>
+        <div class="layout vertical titleColumn timeColumn">
+          <template is="dom-repeat" items="{{data.timeframes}}">
+            <div class="time">[[item]]</div>
+            <div class="time30">30</div>
+          </template>
+        </div>
+      </paper-material>
+      
+      <template is="dom-repeat" items="{{reducedData}}" as="days">
         <paper-material class="dayTab" elevation="3">
-          <h1>[[item.day]]</h1>
-          <table width="100%" cellpadding="0">
-            <tr><td class="mark">7 AM</td><td>[[item.7am]]</td></tr>
-            <tr><td class="mark">8 AM</td><td>[[item.8am]]</td></tr>
-            <tr><td class="mark">9 AM</td><td>[[item.9am]]</td></tr>
-            <tr><td class="mark">10 AM</td><td>[[item.10am]]</td></tr>
-            <tr><td class="mark">11 AM</td><td>[[item.11am]]</td></tr>
-            <tr><td class="mark">12 AM</td><td>[[item.12am]]</td></tr>
-            <tr><td class="mark">1 PM</td><td>[[item.1pm]]</td></tr>
-            <tr><td class="mark">2 PM</td><td>[[item.2pm]]</td></tr>
-          </table>
+          <h1>[[days.day]] - [[days.date]]</h1>
+          <div class="layout vertical timeColumn">
+            <template is="dom-repeat" items="{{days.agenda}}" as="hours">
+              
+            </template>
+          </div>
         </paper-material>
       </template>
     </div>
@@ -162,9 +191,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log('Saving original data...');
         this.originalData = new Array();
         this.reducedData = new Array();
-        for (var i = 0; i < e.detail.response.length; i++) {
-          this.originalData.push(e.detail.response[i]);
-          this.reducedData.push(e.detail.response[i]);
+        console.log(e.detail.response);
+        for (var i = 0; i < e.detail.response.days.length; i++) {
+          this.originalData.push(e.detail.response.days[i]);
+          this.reducedData.push(e.detail.response.days[i]);
         }
         this._onListResize();
       }

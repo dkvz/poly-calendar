@@ -1,9 +1,82 @@
-[
-  {"day": "Lundi", "7am": "", "8am": "", "9am": "", "10am": "Stuff", "11am": "More stuff", "12am": "", "1pm": "", "2pm": "", "3pm": ""},
-  {"day": "Mardi", "7am": "", "8am": "", "9am": "", "10am": "Stuff", "11am": "More stuff", "12am": "", "1pm": "", "2pm": "", "3pm": ""},
-  {"day": "Mercredi", "7am": "", "8am": "", "9am": "", "10am": "Stuff", "11am": "More stuff", "12am": "", "1pm": "", "2pm": "", "3pm": ""},
-  {"day": "Jeudi", "7am": "", "8am": "", "9am": "", "10am": "Stuff", "11am": "More stuff", "12am": "", "1pm": "", "2pm": "", "3pm": ""},
-  {"day": "Vendredi", "7am": "", "8am": "", "9am": "", "10am": "Stuff", "11am": "More stuff", "12am": "", "1pm": "", "2pm": "", "3pm": ""},
-  {"day": "Samedi", "7am": "", "8am": "", "9am": "", "10am": "Stuff", "11am": "More stuff", "12am": "", "1pm": "", "2pm": "", "3pm": ""},
-  {"day": "Dimanche", "7am": "", "8am": "", "9am": "", "10am": "Stuff", "11am": "More stuff", "12am": "", "1pm": "", "2pm": "", "3pm": ""}
-]
+{"timeframes": 
+  [
+    "7:00",
+    "8:00",
+    "9:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00"
+  ],
+"days": 
+  [
+    {"day": "Lundi", "date": "25/06/2016", "agenda": 
+      [
+        {"name": "Paul Fergusson", "color": "red", "id": 30, "blocs": 2, "start": "7:00", "end": "8:00"},
+        {"name": "Test Van Vrie", "color": "white", "id": 32, "blocs": 4, "start": "8:00", "end": "10:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "10:00", "end": "10:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "10:30", "end": "11:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "11:00", "end": "11:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "11:30", "end": "12:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "12:00", "end": "12:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "12:30", "end": "13:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "13:00", "end": "13:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "13:30", "end": "14:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "14:00", "end": "14:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "14:30", "end": "15:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "15:00", "end": "15:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "15:30", "end": "16:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "16:00", "end": "16:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "16:30", "end": "17:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "17:00", "end": "17:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "17:30", "end": "18:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "18:00", "end": "18:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "18:30", "end": "19:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "19:00", "end": "19:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "19:30", "end": "20:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "20:00", "end": "20:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "20:30", "end": "21:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "21:00", "end": "21:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "21:30", "end": "22:00"}
+      ]
+    },
+    {"day": "Mardi", "date": "26/06/2016", "agenda": 
+      [
+        {"name": "Paul Fergusson", "color": "red", "id": 30, "blocs": 2, "start": "7:00", "end": "8:00"},
+        {"name": "Test Van Vrie", "color": "white", "id": 32, "blocs": 4, "start": "8:00", "end": "10:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "10:00", "end": "10:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "10:30", "end": "11:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "11:00", "end": "11:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "11:30", "end": "12:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "12:00", "end": "12:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "12:30", "end": "13:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "13:00", "end": "13:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "13:30", "end": "14:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "14:00", "end": "14:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "14:30", "end": "15:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "15:00", "end": "15:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "15:30", "end": "16:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "16:00", "end": "16:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "16:30", "end": "17:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "17:00", "end": "17:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "17:30", "end": "18:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "18:00", "end": "18:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "18:30", "end": "19:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "19:00", "end": "19:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "19:30", "end": "20:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "20:00", "end": "20:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "20:30", "end": "21:00"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "21:00", "end": "21:30"},
+        {"name": "", "color": "white", "id": 0, "blocs": 1, "start": "21:30", "end": "22:00"}
+      ]
+    }
+  ]
+}
