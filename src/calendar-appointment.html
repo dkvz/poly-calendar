@@ -1,0 +1,96 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="calendar-appointment">
+
+  <template>
+
+    <style>
+      #appoint {
+        border-bottom: var(--appointment-border-bottom, 4px solid silver);
+        margin: 0;
+      }
+      .location {
+        text-align: right;
+        font-weight: bolder
+      }
+    </style>
+    
+    <style is="custom-style" include="shared-styles"></style>
+    
+    <div id="appoint">
+      {{displayedName}}
+      <content></content>
+      <template is="dom-if" if="{{location}}">
+        <div class="location">
+          <hr width="20%" />
+          {{location}}
+        </div>
+      </template>
+    </div>
+    
+  </template>
+  
+    <script>
+
+    Polymer({
+
+      is: 'calendar-appointment',
+      
+      properties: {
+        
+        displayedName: {
+          type: String,
+          notify: true
+        },
+        location: {
+          type: String,
+          notify: true
+        },
+        /**
+          How many blocks we have (i.e. how "long" this appointment is)
+        **/
+        blocs: {
+          type: Number,
+          notify: true,
+          value: 1
+        },
+        color: {
+          type: String,
+          notify: true,
+          value: 'white',
+          observer: '_changeColor'
+        },
+        blockHeight: {
+          type: Number,
+          notify: true,
+          value: 126
+        }
+        
+      },
+      attached: function() {
+        this._updateView();
+      },
+      _updateView: function() {
+        var h = this.blocs * this.blockHeight;
+        this.$.appoint.style.height = h + 'px';
+        this._changeColor();
+      },
+      _changeColor: function() {
+        this.$.appoint.style.backgroundColor = this.color;
+      }
+      
+    });
+
+  </script>
+  
+</dom-module>

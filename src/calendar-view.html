@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="calendar-appointment.html">
 
 <dom-module id="calendar-view">
 
@@ -57,10 +58,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-top: 26px;
       }
       .time {
-        border-bottom: 2px solid silver;
+        border-bottom: 4px solid silver;
+        height: 100px;
       }
       .time30 {
         border-bottom: 4px solid silver;
+        height: 100px;
       }
       
       @media (max-width: 600px) {
@@ -107,7 +110,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h1>[[days.day]] - [[days.date]]</h1>
           <div class="layout vertical timeColumn">
             <template is="dom-repeat" items="{{days.agenda}}" as="hours">
-              
+              <calendar-appointment blocs="[[hours.blocs]]" displayed-name="[[hours.name]]" location="[[hours.location]]">
+              </calendar-appointment>
             </template>
           </div>
         </paper-material>
