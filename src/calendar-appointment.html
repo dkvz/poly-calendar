@@ -73,7 +73,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         blockHeight: {
           type: Number,
           notify: true,
-          value: 126
+          value: 100
+        },
+        perBlocAddHeight: {
+          type: Number,
+          notify: true,
+          value: 4
         }
         
       },
@@ -81,7 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._updateView();
       },
       _updateView: function() {
-        var h = this.blocs * this.blockHeight;
+        var h = (this.blocs * this.blockHeight) + (this.perBlocAddHeight * (this.blocs - 1));
         this.$.appoint.style.height = h + 'px';
         this._changeColor();
       },
