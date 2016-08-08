@@ -51,16 +51,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       }
       .titleColumn {
+        /*margin-top: 32px;*/
         font-weight: bolder;
         text-align: right;
       }
       .time {
         border-bottom: 4px solid silver;
-        height: 100px;
+        height: 36px;
       }
       .time30 {
         border-bottom: 4px solid silver;
-        height: 100px;
+        height: 36px;
       }
       
       @media (max-width: 600px) {
@@ -69,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           margin: 0px;
         }
         .timeTab {
-          width: 100px;
+          width: 80px;
           margin: 0px;
         }
       }
@@ -107,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h1>[[days.day]] - [[days.date]]</h1>
           <div class="layout vertical timeColumn">
             <template is="dom-repeat" items="{{days.agenda}}" as="hours">
-              <calendar-appointment blocs="[[hours.blocs]]" displayed-name="[[hours.name]]" location="[[hours.location]]">
+              <calendar-appointment blocs="[[hours.blocs]]" displayed-name="[[hours.name]]" location="[[hours.location]]" color="[[hours.color]]">
               </calendar-appointment>
             </template>
           </div>

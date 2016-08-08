@@ -16,8 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <style>
       #appoint {
-        border-bottom: var(--appointment-border-bottom, 4px solid silver);
+        /*border-bottom: var(--appointment-border-bottom, 4px solid silver);*/
+        border: var(--appointment-border-bottom, 4px solid silver);
         margin: 0;
+        padding: 6px;
+        margin-top: -4px;
       }
       .location {
         text-align: right;
@@ -30,12 +33,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="appoint">
       {{displayedName}}
       <content></content>
+      <!--
       <template is="dom-if" if="{{location}}">
         <div class="location">
           <hr width="20%" />
           {{location}}
         </div>
       </template>
+      -->
     </div>
     
   </template>
@@ -73,12 +78,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         blockHeight: {
           type: Number,
           notify: true,
-          value: 100
+          value: 24
         },
         perBlocAddHeight: {
           type: Number,
           notify: true,
-          value: 4
+          value: 16
         }
         
       },
