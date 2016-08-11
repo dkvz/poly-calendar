@@ -8,6 +8,11 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="appointment-edit-dialog.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="calendar-appointment">
@@ -16,7 +21,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <style>
       #appoint {
-        /*border-bottom: var(--appointment-border-bottom, 4px solid silver);*/
         border: var(--appointment-border-bottom, 4px solid silver);
         margin: 0;
         padding: 6px;
@@ -26,13 +30,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         text-align: right;
         font-weight: bolder
       }
+      .dialog {
+        overflow: auto;
+      }
+      /*paper-fab {
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+      }*/
     </style>
     
     <style is="custom-style" include="shared-styles"></style>
     
-    <div id="appoint">
+    <!-- The with-backdrop option makes the background darker when dialog is shown, not sure if it makes it modal -->
+    <paper-dialog class="dialog" id="details" no-overlap horizontal-align="left" vertical-align="top" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <h2>Détails</h2>
+      <p>
+        <template is="dom-if" if="{{location}}">
+          <b>Localisation:&nbsp</b>{{location}}
+        </template>
+        <div>
+          <paper-fab icon="image:edit" on-tap="edit"></paper-fab>
+        </div>
+      </p>
+    </paper-dialog>
+    <appointment-edit-dialog id="editDialog" date="{{date}}" displayed-name="{{displayedName}}" location="{{location}}" blocs="{{blocs}}" start-time="{{startTime}}"></appointment-edit-dialog>
+    
+    <div id="appoint" on-tap="showDetails">
       {{displayedName}}
-      <content></content>
       <!--
       <template is="dom-if" if="{{location}}">
         <div class="location">
@@ -54,6 +79,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         
         displayedName: {
+          type: String,
+          notify: true
+        },
+        date: {
+          type: String,
+          notify: true
+        },
+        startTime: {
           type: String,
           notify: true
         },
@@ -97,6 +130,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _changeColor: function() {
         this.$.appoint.style.backgroundColor = this.color;
+      },
+      showDetails: function() {
+        this.$.details.positionTarget = this.$.appoint;
+        this.$.details.open();
+      },
+      edit: function() {
+        this.$.details.close();
+        this.$.editDialog.open();
       }
       
     });

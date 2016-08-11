@@ -1,0 +1,103 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="appointment-edit-dialog">
+
+  <template>
+
+    <style>
+
+    </style>
+    
+    <style is="custom-style" include="shared-styles"></style>
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+    
+    <!--<paper-dialog id="editDialog" no-cancel-on-outside-click no-cancel-on-esc-key always-on-top>-->
+    <paper-dialog id="editDialog" modal always-on-top on-iron-overlay-opened="patchOverlay">
+      <div class="layout vertical">
+        <h2>Editer le rendez-vous</h2>
+        <paper-input label="Nom" id="inputName" value="{{displayedName}}"></paper-input>
+        <paper-input label="Localisation" id="inputLocation" value="{{location}}"></paper-input>
+        <!-- I need a delete button if a displayedName exists -->
+        <div class="layout horizontal right-justified">
+          <!-- I need a delete button if a displayedName exists -->
+          <!-- TODO Translations in title arguments here -->
+          <paper-icon-button icon="save" title="Save" on-tap="save"></paper-icon-button>
+          <paper-icon-button icon="delete" title="Delete" on-tap="remove"></paper-icon-button>
+          <paper-icon-button icon="cancel" title="Cancel" on-tap="close"></paper-icon-button>
+        </div>
+      </div>
+    </paper-dialog>
+    
+  </template>
+  
+    <script>
+
+    Polymer({
+
+      is: 'appointment-edit-dialog',
+      
+      properties: {
+        
+        displayedName: {
+          type: String,
+          notify: true
+        },
+        date: {
+          type: String,
+          notify: true
+        },
+        startTime: {
+          type: String,
+          notify: true
+        },
+        location: {
+          type: String,
+          notify: true
+        },
+        blocs: {
+          type: Number,
+          notify: true,
+          value: 1
+        }
+        
+      },
+      save: function() {
+        console.log('Hit the save button for ' + this.date);
+        this.close();
+      },
+      remove: function() {
+        console.log('Hit the delete button for ' + this.date);
+        this.close();
+      },
+      open: function() {
+        this.$.editDialog.open();
+      },
+      close: function() {
+        this.$.editDialog.close();
+      },
+      patchOverlay: function (e) {
+        if (e.target.withBackdrop) {
+          e.target.parentNode.insertBefore(e.target.backdropElement, e.target);
+        }
+      }
+      
+    });
+
+  </script>
+  
+</dom-module>

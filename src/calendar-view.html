@@ -108,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h1>[[days.day]] - [[days.date]]</h1>
           <div class="layout vertical timeColumn">
             <template is="dom-repeat" items="{{days.agenda}}" as="hours">
-              <calendar-appointment blocs="[[hours.blocs]]" displayed-name="[[hours.name]]" location="[[hours.location]]" color="[[hours.color]]">
+              <calendar-appointment blocs="[[hours.blocs]]" displayed-name="[[hours.name]]" location="[[hours.location]]" color="[[hours.color]]" start-time="[[hours.start]]" date="[[days.date]]">
               </calendar-appointment>
             </template>
           </div>
