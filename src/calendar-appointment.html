@@ -54,7 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </p>
     </paper-dialog>
-    <appointment-edit-dialog id="editDialog" date="{{date}}" displayed-name="{{displayedName}}" location="{{location}}" blocs="{{blocs}}" start-time="{{startTime}}"></appointment-edit-dialog>
+    <appointment-edit-dialog id="editDialog" date="{{date}}" displayed-name="{{displayedName}}" location="{{location}}" blocs="{{blocs}}" start-time="{{startTime}}" data="{{data}}"></appointment-edit-dialog>
     
     <div id="appoint" on-tap="showDetails">
       {{displayedName}}
@@ -118,6 +118,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           notify: true,
           value: 16
+        },
+        /**
+          In my testing this is passed by reference. I hope it is on every browser.
+        **/
+        data: {
+          type: Array,
+          notify: true
         }
         
       },

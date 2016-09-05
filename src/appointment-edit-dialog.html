@@ -79,11 +79,125 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           notify: true,
           value: 1
+        },
+        /**
+          In my testing this is passed by reference. I hope it is on every browser.
+        **/
+        data: {
+          type: Array,
+          notify: true
+        },
+        /**
+          Maximum endTime we can have.
+        **/
+        maxEndTime: {
+          type: String,
+          notify: true,
+          value: '23:00'
         }
         
       },
       save: function() {
         console.log('Hit the save button for ' + this.date);
+        for (var i = 0; i < this.data.length; i++) {
+          if (this.data[i]['date'] === this.date) {
+            // Found current day in the original data array.
+            // Let's modify the data:
+            var p;
+            for (p = 0; p < this.data[i]['agenda'].length; p++) {
+              if (this.data[i]['agenda'][p]['start'] === this.startTime) {
+                // Found current bloc.
+                // Calculate end time:
+                var pos = this.startTime.indexOf(':');
+                var hours = parseInt(this.startTime.substring(0, pos));
+                var minutes = parseInt(this.startTime.substring(pos + 1, this.startTime.length)); 
+                var endHour = hours + Math.floor(this.blocs / 2.0);
+                var endMinutes = ''; // To remind me that this one is actually a string.
+                // I think there may be an easier way to do this :)
+                if (this.blocs % 2 == 0) {
+                  if (minutes == 0) {
+                    endMinutes = '00';
+                  } else {
+                    endMinutes = '30';
+                  }
+                } else {
+                  if (minutes == 0) {
+                    endMinutes = '30';
+                  } else {
+                    endMinutes = '00';
+                  }
+                }
+                // Shouldn't we apply a limit to time here?
+                var newEndTime = '';
+                if (endHour >= parseInt(this.maxEndTime.substring(0, this.maxEndTime.indexOf(':')))) {
+                  newEndTime = this.maxEndTime;
+                } else {
+                  newEndTime = endHour + ':' + endMinutes;
+                }
+                // TODO:
+                // ************
+                // Check if we're overlapping another appointment!
+                // ************
+                // Setting the new end time:
+                var oldBlocs = this.data[i]['agenda'][p]['blocs'];
+                this.data[i]['agenda'][p]['end'] = newEndTime;
+                this.data[i]['agenda'][p]['blocs'] = this.blocs;
+                // If blocs increased, we need to remove all the next single blocs until the one with startTime = endTime.
+                // But what if the next bloc is not a single bloc (or some blocs later)? -> Discussed in my work notebook.
+                // If blocs decreased, we need to re-create single blocs.
+                // If blocs did not change we shouldn't do anything, actually.
+                if (oldBlocs > this.blocs) {
+                  // The easy one, we just need to create new blank blocs corresponding to the ones removed.
+                  var newBlocsCount = oldBlocs - this.blocs;
+                  // I'll need to splice the array and add the new blocs.
+                  var oscillatorM;
+                  for (var x = 0; x < newBlocsCount; x++) {
+                    var newRow = Object();
+                    newRow.name = '';
+                    newRow.id = 0;
+                    newRow.location = '';
+                    var nStartH = endHour + Math.floor(x / 2.0);
+                    var nEndH;
+                    var nEndM;
+                    if (x == 0) {
+                      oscillatorM = endMinutes;
+                    } else {
+                      if (oscillatorM == '00') {
+                        oscillatorM = '30';
+                      } else {
+                        oscillatorM = '00';
+                      }
+                    }
+                    // My god what is this code
+                    if (oscillatorM == '00') {
+                      nEndM = '30';
+                      nEndH = nStartH;
+                    } else {
+                      nEndM = '00';
+                      nEndH = nStartH + 1;
+                    }
+                    newRow.start = nStartH + ':' + oscillatorM;
+                    // The end is just the start + 30 minutes.
+                    newRow.end = nEndH + ':' + nEndM;
+                    // Splice the row inside the array.
+                    this.data[i]['agenda'].splice(p + 1, 0, newRow);
+                    /**console.log('Adding this row: ');
+                    console.log(newRow);
+                    console.log('New state of the array:');
+                    console.log(this.data[i]['agenda']);**/
+                    
+                  }
+                } else if (oldBlocs < this.blocs) {
+                  // TODO
+                  
+                }
+                break;
+              }
+            }
+            // Quit the loop:
+            break;
+          }
+        }
         this.close();
       },
       remove: function() {

@@ -103,12 +103,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </paper-material>
       
-      <template is="dom-repeat" items="{{reducedData}}" as="days">
+      <template is="dom-repeat" items="{{reducedData}}" as="days" id="cal">
         <paper-material class="dayTab" elevation="3">
           <h1>[[days.day]] - [[days.date]]</h1>
           <div class="layout vertical timeColumn">
             <template is="dom-repeat" items="{{days.agenda}}" as="hours">
-              <calendar-appointment blocs="[[hours.blocs]]" displayed-name="[[hours.name]]" location="[[hours.location]]" color="[[hours.color]]" start-time="[[hours.start]]" date="[[days.date]]">
+              <calendar-appointment blocs="[[hours.blocs]]" 
+                displayed-name="[[hours.name]]" 
+                location="[[hours.location]]" 
+                color="[[hours.color]]" 
+                start-time="[[hours.start]]" 
+                date="[[days.date]]"
+                data="{{originalData}}">
               </calendar-appointment>
             </template>
           </div>
@@ -137,7 +143,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         originalData: {
           type: Array,
-          notify: true
+          notify: true,
+          value: []
         },
         reducedData: {
           type: Array,
@@ -147,6 +154,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           notify: true,
           value: 300
+        },
+        previousWidth: {
+          type: Number,
+          notify: true,
+          value: -1
         }
 
       },
@@ -162,42 +174,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _onListResize: function() {
         console.log('List resized fired.');
         if (this.originalData) {
-          console.log('Original data not empty.');
+          //console.log('Original data not empty.');
           var w = this.$.listArea.offsetWidth;
-          // We need to determine how much we can resize here.
-          // And take a certain percentage as security.
-          var ratio = Math.floor(w / this.listItemWidth);
-          console.log('Found ratio: ' + ratio);
-          // This code is stupid.
-          if (ratio < 1) {
-            ratio = 1;
+          if (Math.abs(w - this.previousWidth) >= this.listItemWidth) {
+            this.previousWidth = w;
+            // We need to determine how much we can resize here.
+            // And take a certain percentage as security.
+            this._produceResizedList(w);
+          } else {
+            console.log('Change in width too low, resize event aborted.');
           }
-          if (ratio >= 1) {
-            var max = ratio;
-            if (max > this.originalData.length) {
-              max = this.originalData.length;
-            }
-            console.log('Going up to ' + max);
-            var nd = new Array();
-            for (var i = 0; i < max; i++) {
-              nd.push(this.originalData[i]);
-            }
-            this.reducedData = nd;
+        }
+      },
+      produceResizedList: function() {
+        var w = this.$.listArea.offsetWidth;
+        this._produceResizedList(w);
+      },
+      _produceResizedList: function(w) {
+        var ratio = Math.floor(w / this.listItemWidth);
+        //console.log('Found ratio: ' + ratio);
+        // This code is stupid.
+        if (ratio < 1) {
+          ratio = 1;
+        }
+        if (ratio >= 1) {
+          var max = ratio;
+          if (max > this.originalData.length) {
+            max = this.originalData.length;
           }
+          //console.log('Going up to ' + max);
+          if (this.reducedData) {
+            this.splice('reducedData', 0, this.reducedData.length);
+          } else {
+            this.reducedData = Array();
+          }
+          //var nd = new Array();
+          for (var i = 0; i < max; i++) {
+            //nd.push(this.originalData[i]);
+            this.push('reducedData', this.originalData[i]);
+          }
+          //this.reducedData = nd;
+          
+          // This doesn't work:
+          //this.$.cal.render();
         }
       },
       _dataChanged: function() {
-        //console.log('Data changed fired.');
+        console.log('Data changed fired on calendar-view.');
       },
       saveOriginalData: function(e) {
         console.log('Saving original data...');
-        this.originalData = new Array();
+        //this.originalData = new Array();
+        this.splice('originalData', 0, this.originalData.length);
         this.reducedData = new Array();
-        console.log(e.detail.response);
         for (var i = 0; i < e.detail.response.days.length; i++) {
-          this.originalData.push(e.detail.response.days[i]);
+          //this.originalData.push(e.detail.response.days[i]);
+          this.push('originalData', e.detail.response.days[i]);
           this.reducedData.push(e.detail.response.days[i]);
         }
+        this.previousWidth = -1;
         this._onListResize();
       }
 
