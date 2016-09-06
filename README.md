@@ -1,7 +1,4 @@
-# Polymer App Toolbox - Drawer Template
-
-This template is a starting point for building apps using a drawer-based
-layout.  The layout is provided by `app-layout` elements.
+# Polymer App - Calendar prototype
 
 This template, along with the `polymer-cli` toolchain, also demonstrates use
 of the "PRPL pattern" This pattern allows fast first delivery and interaction with

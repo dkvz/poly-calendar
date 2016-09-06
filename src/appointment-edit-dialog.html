@@ -188,13 +188,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     newRow.end = nEndH + ':' + nEndM;
                     // Splice the row inside the array.
                     this.data[i]['agenda'].splice(p + 1, 0, newRow);
-                    /**console.log('Adding this row: ');
-                    console.log(newRow);
-                    console.log('New state of the array:');
-                    console.log(this.data[i]['agenda']);**/
+                    // TODO
+                    // Save in the backend. This should not be async.
                     
                   }
                 } else if (oldBlocs < this.blocs) {
+                  
                   // TODO
                   
                 }
