@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <!-- TODO Translations in title arguments here -->
           <paper-icon-button icon="save" title="Save" on-tap="save"></paper-icon-button>
           <paper-icon-button icon="delete" title="Delete" on-tap="remove"></paper-icon-button>
-          <paper-icon-button icon="cancel" title="Cancel" on-tap="close"></paper-icon-button>
+          <paper-icon-button icon="cancel" title="Cancel" on-tap="cancel"></paper-icon-button>
         </div>
       </div>
     </paper-dialog>
@@ -74,6 +74,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         location: {
           type: String,
           notify: true
+        },
+        originalData: {
+          type: Object,
+          notify: false
         },
         blocs: {
           type: Number,
@@ -105,7 +109,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       },
       save: function() {
-        console.log('Hit the save button for ' + this.date);
         for (var i = 0; i < this.data.length; i++) {
           if (this.data[i]['date'] === this.date) {
             // Found current day in the original data array.
@@ -191,11 +194,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     // TODO
                     // Save in the backend. This should not be async.
                     
+                    this.saveOriginalData();
                   }
                 } else if (oldBlocs < this.blocs) {
                   
                   // TODO
                   
+                  this.saveOriginalData();
                 }
                 break;
               }
@@ -208,12 +213,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //this.viewElement.modified = true;
         this.modified = true;
       },
+      attached: function() {
+        this.saveOriginalData();
+      },
+      saveOriginalData: function() {
+        this.originalData = {
+          location: this.location,
+          displayedName: this.displayedName,
+          blocs: this.blocs
+        };
+      },
       remove: function() {
         console.log('Hit the delete button for ' + this.date);
         this.close();
       },
       open: function() {
         this.$.editDialog.open();
+      },
+      cancel: function() {
+        this.displayedName = this.originalData.displayedName;
+        this.blocs = this.originalData.blocs;
+        this.location = this.originalData.location;
+        this.close();
       },
       close: function() {
         this.$.editDialog.close();
