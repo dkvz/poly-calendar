@@ -94,6 +94,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           notify: true,
           value: '23:00'
+        },
+        viewElement: {
+          type: Object
+        },
+        modified: {
+          type: Boolean,
+          notify: true
         }
         
       },
@@ -199,6 +206,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
         this.close();
+        //this.viewElement.modified = true;
+        this.modified = true;
       },
       remove: function() {
         console.log('Hit the delete button for ' + this.date);

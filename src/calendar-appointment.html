@@ -54,7 +54,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </p>
     </paper-dialog>
-    <appointment-edit-dialog id="editDialog" date="{{date}}" displayed-name="{{displayedName}}" location="{{location}}" blocs="{{blocs}}" start-time="{{startTime}}" data="{{data}}"></appointment-edit-dialog>
+    <appointment-edit-dialog 
+      id="editDialog" date="{{date}}" 
+      displayed-name="{{displayedName}}" 
+      location="{{location}}" blocs="{{blocs}}" 
+      start-time="{{startTime}}" 
+      data="{{data}}"
+      view-element="[[viewElement]]"
+      modified="{{modified}}">
+    </appointment-edit-dialog>
     
     <div id="appoint" on-tap="showDetails">
       {{displayedName}}
@@ -124,6 +132,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         **/
         data: {
           type: Array,
+          notify: true
+        },
+        viewElement: {
+          type: Object
+        },
+        modified: {
+          type: Boolean,
           notify: true
         }
         

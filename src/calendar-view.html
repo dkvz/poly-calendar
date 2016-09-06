@@ -91,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 
     <iron-ajax url="data.json" last-response="{{data}}" on-response="saveOriginalData" auto></iron-ajax>
-    
+
     <div id="listArea" class="layout left-justified horizontal">
       <paper-material class="timeTab" elevation="4">
         <h1>&nbsp;</h1>
@@ -107,14 +107,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-material class="dayTab" elevation="3">
           <h1>[[days.day]] - [[days.date]]</h1>
           <div class="layout vertical timeColumn">
-            <template is="dom-repeat" items="{{days.agenda}}" as="hours">
+            <template is="dom-repeat" items="{{days.agenda}}" as="hours" id="calDay">
               <calendar-appointment blocs="[[hours.blocs]]" 
                 displayed-name="[[hours.name]]" 
                 location="[[hours.location]]" 
                 color="[[hours.color]]" 
                 start-time="[[hours.start]]" 
                 date="[[days.date]]"
-                data="{{originalData}}">
+                data="{{originalData}}"
+                view-element="[[viewElement]]"
+                modified="{{modified}}">
               </calendar-appointment>
             </template>
           </div>
@@ -159,6 +161,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           notify: true,
           value: -1
+        },
+        viewElement: {
+          type: Object
+          //value: this
+        },
+        modified: {
+          type: Boolean,
+          notify: true,
+          value: false,
+          observer: '_modifiedChanged'
         }
 
       },
@@ -169,6 +181,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       
       attached: function() {
         console.log('Attached has been called.');
+        this.viewElement = this;
         //this.$.theList.addEventListener('iron-resize', this._onListResize.bind(this));
       },
       _onListResize: function() {
@@ -186,7 +199,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       },
-      produceResizedList: function() {
+      _produceResizedListNoW: function() {
+        console.log('Called produceResizedListNow');
         var w = this.$.listArea.offsetWidth;
         this._produceResizedList(w);
       },
@@ -202,21 +216,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           if (max > this.originalData.length) {
             max = this.originalData.length;
           }
-          //console.log('Going up to ' + max);
+          // Not sure I need this stuff:
           if (this.reducedData) {
             this.splice('reducedData', 0, this.reducedData.length);
           } else {
             this.reducedData = Array();
           }
-          //var nd = new Array();
+          var nd = new Array();
           for (var i = 0; i < max; i++) {
-            //nd.push(this.originalData[i]);
-            this.push('reducedData', this.originalData[i]);
+            nd.push(this.originalData[i]);
+            //this.push('reducedData', this.originalData[i]);
           }
-          //this.reducedData = nd;
-          
+          this.reducedData = nd;
+          /*for (var x = 0; x < this.reducedData.length; x++) {
+            var red = this.reducedData[x].agenda;
+            console.log(this.reducedData[x].agenda);
+            this.reducedData[x].agenda = [];
+            this.reducedData[x].agenda = red;
+          }*/
+          this._reconcileAgendas();
           // This doesn't work:
           //this.$.cal.render();
+          console.log('Produced resized list for width ' + w);
         }
       },
       _dataChanged: function() {
@@ -234,6 +255,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         this.previousWidth = -1;
         this._onListResize();
+      },
+      testFunc: function() {
+        console.log('Called test function.');  
+      },
+      _reconcileAgendas: function() {
+        var arr = this.shadowRoot.querySelectorAll('#calDay');
+        for (var i = 0; i < arr.length; i++) {
+          if (this.reducedData[i]) {
+            arr[i].items = [];
+            arr[i].items = this.reducedData[i].agenda;
+          }
+        }
+      },
+      _modifiedChanged: function() {
+        console.log('Observer for modified called.');
+        if (this.modified === true) {
+          var w = this.$.listArea.offsetWidth;
+          this.async(this._produceResizedListNoW, 500);
+          this.modified = false;
+        }
       }
 
     });
