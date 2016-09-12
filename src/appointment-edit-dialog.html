@@ -105,6 +105,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         modified: {
           type: Boolean,
           notify: true
+        },
+        warningMessage: {
+          type: String,
+          notify: true,
+          value: ''
         }
         
       },
@@ -192,13 +197,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     // Splice the row inside the array.
                     this.data[i]['agenda'].splice(p + 1, 0, newRow);
                     // TODO
-                    // Save in the backend. This should not be async.
+                    // Save in the backend. This should not be async. Should be a func because used two times.
                     
                     this.saveOriginalData();
                   }
                 } else if (oldBlocs < this.blocs) {
+                  // We're removing blocs.
+                  var toRemove = Array();
+                  // Start looking at blocs after this one:
+                  for (var y = (p + 1); y < this.data[i]['agenda'].length; y++) {
+                    
+                    // Check if the endtime of this bloc is >= newEndTime of our bloc.
+                    // We got endHours and endMinutes to make this comparison easier.
+                    // We also got hours and minutes.
+                    var endTNum = endHours + 0.5 * (parseInt(endMinutes) / 30);
+                    var blocEndH = parseInt(this.data[i]['agenda'][y]['end'].substring(0, pos));
+                    var blocEndM = parseInt(this.data[i]['agenda'][y]['end']substring(pos + 1, this.startTime.length));
+                    var blocTNum = blocEndH + 0.5 * (blocEndM / 30);
+                    if (blocTNum <= endTNum) {                      
+                      // Check if this is an appointment.
+                      // I'm going to check the id.
+                      if (!this.data[i]['agenda'][y]['id'] || this.data[i]['agenda'][y]['id'] <= 0) {
+                        // There is an appointment here.
+                        this.warningMessage = 'This appointment is overlapping with another.';
+                        return;
+                      } else {
+                        // Remove this bloc.
+                        // But we need not remove it if there is an overlapping block later...
+                        // Let's register the end times of blocs to remove somewhere.
+                        toRemove.push(y);
+                      }
+                      // Then continue with the loop.
+                    } else if (blocTNum > endTNum) {
+                      // This has to be an appointment.
+                      // We need the warning.
+                      this.warningMessage = 'This appointment is overlapping with another.';
+                      return;
+                    }
+                  }
+                  // I can splice remove from the first to the last element of toRemove.
+                  // Begin at first element, stop at toRemove.length later.
+                  if (toRemove.length > 0) {
+                    this.data[i]['agenda'].splice(toRemove[0], toRemove.length);
+                  }
                   
                   // TODO
+                  // Save in the backend. This should not be async. Should be a func because used two times.
                   
                   this.saveOriginalData();
                 }
@@ -246,10 +290,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       addBloc: function() {
        this.blocs++;
+       this.warningMessage = '';
       },
       removeBloc: function() {
         if (this.blocs > 1) {
           this.blocs--;
+          this.warningMessage = '';
         }
       }
       
