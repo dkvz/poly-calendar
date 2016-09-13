@@ -117,6 +117,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       },
       save: function() {
+        // TODO
+        // There is refactoring to do.
         for (var i = 0; i < this.data.length; i++) {
           if (this.data[i]['date'] === this.date) {
             // Found current day in the original data array.
@@ -199,11 +201,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     newRow.end = nEndH + ':' + nEndM;
                     // Splice the row inside the array.
                     this.data[i]['agenda'].splice(p + 1, 0, newRow);
-                    // TODO
-                    // Save in the backend. This should not be async. Should be a func because used two times.
-                    
-                    this.saveOriginalData();
                   }
+                  // TODO
+                  // Save in the backend. This should not be async. Should be a func because used two times.
+                  
+                  this.saveOriginalData();
                 } else if (oldBlocs < this.blocs) {
                   // We're removing blocs (by virute of increasing bloc size).
                   var toRemove = Array();
@@ -284,7 +286,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       },
       remove: function() {
-        console.log('Hit the delete button for ' + this.date);
+        // This is going to be the next big piece.
+        // We'll start without asking for confirmation.
+        // Let's find where we are in the global data array:
+        var i = this.findCurrentPosition();
+        if (i >= 0) {
+          var p;
+          for (p = 0; p < this.data[i]['agenda'].length; p++) {
+            if (this.data[i]['agenda'][p]['start'] === this.startTime) {
+              // Found current bloc.
+              // Remove:
+              this.data[i]['agenda'].splice(p, 1);
+              // Use originalData bloc size to determine the new blocs to add:
+              
+              break;
+            }
+          }
+        }
         this.close();
       },
       open: function() {
@@ -313,6 +331,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.blocs--;
           this.warningMessage = '';
         }
+      },
+      findCurrentDayPosition: function() {
+        for (var i = 0; i < this.data.length; i++) {
+          if (this.data[i]['date'] === this.date) {
+            return i;
+          }
+        }
+        return -1;
+      },
+      getBlankBlocs: function(start, blocs) {
+        // Return an array of blank blocs starting with the given
+        // start time.
+        var ret = Array();
+        // I love to have millions of var declarations
+        var pos = this.startTime.indexOf(':');
+        var hours = parseInt(this.startTime.substring(0, pos));
+        var minutes = parseInt(this.startTime.substring(pos + 1, this.startTime.length)); 
+        var nStart = hours + 0.5 * (minutes / 30);
+        for (var i = 0; i < blocs; i++) {
+          
+          var newRow = Object();
+          ret.push(newRow);
+          nStart += 0.5;
+        }
+      },
+      _getTimeRepresentation: function(time) {
+        return Math.floor(time).toString() + (time % 1).toString();
       }
       
     });
