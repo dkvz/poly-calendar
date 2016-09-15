@@ -68,7 +68,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         route="{{route}}"
         pattern="/:page"
         data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+        tail="{{subroute}}">
+    </app-route>
 
     <app-drawer-layout fullbleed>
 
@@ -129,6 +130,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (page === 'cal') {
           this.importHref(
           this.resolveUrl('calendar-view.html'), null, null, true);
+          document.title = 'Appointments - Calendar View';
+        } else {
+          document.title = 'Appointments';
         }
       }
 

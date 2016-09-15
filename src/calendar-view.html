@@ -189,12 +189,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       
       attached: function() {
-        console.log('Attached has been called.');
         this.viewElement = this;
         //this.$.theList.addEventListener('iron-resize', this._onListResize.bind(this));
       },
       _onListResize: function() {
-        console.log('List resized fired.');
+        console.log('List resize fired.');
         if (this.originalData) {
           //console.log('Original data not empty.');
           var w = this.$.listArea.offsetWidth;
@@ -270,6 +269,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log('Called test function.');  
       },
       _reconcileAgendas: function() {
+        var arr = Polymer.dom(this.root).querySelectorAll('#calDay');
+        for (var i = 0; i < arr.length; i++) {
+          if (this.reducedData[i]) {
+            arr[i].items = [];
+            arr[i].items = this.reducedData[i].agenda;
+          }
+        }
+        // shadowRoot only works on Chrome or with the full shadowDOM polyfill
+        // Which requires to import webcomponent.js and not webcomponent-lite.js
+        // as far as I understand. Haven't tested that though.
+        /*
         var arr = this.shadowRoot.querySelectorAll('#calDay');
         for (var i = 0; i < arr.length; i++) {
           if (this.reducedData[i]) {
@@ -277,6 +287,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             arr[i].items = this.reducedData[i].agenda;
           }
         }
+        */
       },
       _modifiedChanged: function() {
         console.log('Observer for modified called.');
