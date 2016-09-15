@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
@@ -94,6 +95,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div id="listArea" class="layout left-justified horizontal">
       <paper-material class="timeTab" elevation="4">
+        <template is="dom-if" if="{{syncing}}">
+          <paper-spinner active alt="Loading..."></paper-spinner>
+        </template>
         <h1>&nbsp;</h1>
         <div class="layout vertical titleColumn timeColumn">
           <template is="dom-repeat" items="{{data.timeframes}}">
@@ -171,6 +175,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           notify: true,
           value: false,
           observer: '_modifiedChanged'
+        },
+        syncing: {
+          type: Boolean,
+          notify: true,
+          value: true
         }
 
       },
@@ -255,6 +264,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         this.previousWidth = -1;
         this._onListResize();
+        this.syncing = false;
       },
       testFunc: function() {
         console.log('Called test function.');  
