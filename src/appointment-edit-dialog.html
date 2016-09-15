@@ -113,6 +113,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           notify: true,
           value: ''
+        },
+        color: {
+          type: String,
+          notify: true,
+          value: 'white'
         }
         
       },
@@ -232,7 +237,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         // Remove this bloc.
                         // But we need not remove it if there is an overlapping block later...
                         // Let's register the end times of blocs to remove somewhere.
-                        console.log('Pushing this: ' + y);
                         toRemove.push(y);
                       }
                       // If we have equal endTimes, this is the last bloc to check and we can 
@@ -283,24 +287,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // We'll start without asking for confirmation.
         // Let's find where we are in the global data array:
         var i = this.findCurrentDayPosition();
+        var modify = false;
         if (i >= 0) {
           var p;
           for (p = 0; p < this.data[i]['agenda'].length; p++) {
             if (this.data[i]['agenda'][p]['start'] === this.startTime) {
               // Found current bloc.
-              // Remove:
-              this.data[i]['agenda'].splice(p, 1);
-              // Remove all the data for this bloc:
-              this.blocs = 1;
-              this.name = '';
-              this.id = 0;
-              // Use originalData bloc size to determine the new blocs to add:
-              var newBlocs = this.getBlankBlocs(this.start, this.originalData.blocs);
-              // Add the new blocs to the data arrray:
-              for (var x = 0; x < newBlocs.length; x++) {
-                this.data[i]['agenda'].splice(p + 1 + x, 0, newBlocs[x]);
+              // We should actually check if there is data there.
+              if (this.data[i]['agenda'][p]['id'] > 0) {
+                // Remove:
+                this.data[i]['agenda'].splice(p, 1);
+                // Remove all the data for this bloc:
+                this._clearBloc();
+                // Use originalData bloc size to determine the new blocs to add:
+                var newBlocs = this.getBlankBlocs(this.start, this.originalData.blocs);
+                // Add the new blocs to the data arrray:
+                for (var x = 0; x < newBlocs.length; x++) {
+                  this.data[i]['agenda'].splice(p + x, 0, newBlocs[x]);
+                }
+                modify = true;
+                this.saveOriginalData();
               }
-              this.saveOriginalData();
               break;
             }
           }
@@ -309,7 +316,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Apply to backend:
         
         this.close();
-        this.modified = true;
+        // Trigger the listener for modified on the parent components:
+        this.modified = modify;
       },
       open: function() {
         this.$.editDialog.open();
@@ -365,7 +373,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return ret;
       },
       _getTimeRepresentation: function(time) {
-        return Math.floor(time).toString() + ':' + (time % 1).toString();
+        var mins = '00';
+        if ((time % 1) != 0) {
+          mins = '30';
+        }
+        return Math.floor(time).toString() + ':' + mins;
       },
       _getBlankAgendaRow: function(newRow) {
         var newRow = Object();
@@ -373,6 +385,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         newRow.id = 0;
         newRow.location = '';
         return newRow;
+      },
+      _clearBloc: function() {
+        this.blocs = 1;
+        this.displayedName = '';
+        this.id = 0;
+        this.color = 'white';
       }
       
     });

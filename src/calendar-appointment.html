@@ -43,8 +43,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style is="custom-style" include="shared-styles"></style>
     
     <!-- The with-backdrop option makes the background darker when dialog is shown, not sure if it makes it modal -->
-    <paper-dialog class="dialog" id="details" no-overlap horizontal-align="left" vertical-align="top" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+    <paper-dialog class="dialog" id="details" no-overlap entry-animation="scale-up-animation" exit-animation="fade-out-animation">
       <h2>Détails</h2>
+      <p>
+        <b>Date: </b>{{date}}
+      </p>
+      <p>
+        {{startTime}}
+      </p>
       <p>
         <template is="dom-if" if="{{location}}">
           <b>Localisation:&nbsp</b>{{location}}
@@ -61,7 +67,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       start-time="{{startTime}}" 
       data="{{data}}"
       view-element="[[viewElement]]"
-      modified="{{modified}}">
+      modified="{{modified}}"
+      color="{{color}}">
     </appointment-edit-dialog>
     
     <div id="appoint" on-tap="showDetails">
@@ -155,7 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.appoint.style.backgroundColor = this.color;
       },
       showDetails: function() {
-        this.$.details.positionTarget = this.$.appoint;
+        //this.$.details.positionTarget = this.$.appoint;
         this.$.details.open();
       },
       edit: function() {
