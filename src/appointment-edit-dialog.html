@@ -255,7 +255,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   // I can splice remove from the first to the last element of toRemove.
                   // Begin at first element, stop at toRemove.length later.
                   if (toRemove.length > 0) {
-                    console.log('Splicing from ' + toRemove[0] + ' with length ' + toRemove.length);
                     this.data[i]['agenda'].splice(toRemove[0], toRemove.length);
                   }
                   
@@ -289,7 +288,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // This is going to be the next big piece.
         // We'll start without asking for confirmation.
         // Let's find where we are in the global data array:
-        var i = this.findCurrentPosition();
+        var i = this.findCurrentDayPosition();
         if (i >= 0) {
           var p;
           for (p = 0; p < this.data[i]['agenda'].length; p++) {
@@ -297,13 +296,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               // Found current bloc.
               // Remove:
               this.data[i]['agenda'].splice(p, 1);
+              // Remove all the data for this bloc:
+              this.blocs = 1;
+              this.name = '';
+              this.id = 0;
               // Use originalData bloc size to determine the new blocs to add:
-              
+              var newBlocs = this.getBlankBlocs(this.start, this.originalData.blocs);
+              // Add the new blocs to the data arrray:
+              for (var x = 0; x < newBlocs.length; x++) {
+                this.data[i]['agenda'].splice(p + 1 + x, 0, newBlocs[x]);
+              }
+              this.saveOriginalData();
               break;
             }
           }
         }
+        // TODO
+        // Apply to backend:
+        
         this.close();
+        this.modified = true;
       },
       open: function() {
         this.$.editDialog.open();
@@ -350,14 +362,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var minutes = parseInt(this.startTime.substring(pos + 1, this.startTime.length)); 
         var nStart = hours + 0.5 * (minutes / 30);
         for (var i = 0; i < blocs; i++) {
-          
-          var newRow = Object();
+          var newRow = this._getBlankAgendaRow(newRow);
+          newRow.start = this._getTimeRepresentation(nStart);
+          newRow.end = this._getTimeRepresentation(nStart + 0.5);
           ret.push(newRow);
           nStart += 0.5;
         }
+        return ret;
       },
       _getTimeRepresentation: function(time) {
-        return Math.floor(time).toString() + (time % 1).toString();
+        return Math.floor(time).toString() + ':' + (time % 1).toString();
+      },
+      _getBlankAgendaRow: function(newRow) {
+        var newRow = Object();
+        newRow.name = '';
+        newRow.id = 0;
+        newRow.location = '';
+        return newRow;
       }
       
     });
