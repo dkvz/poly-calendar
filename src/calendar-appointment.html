@@ -11,7 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/iron-icons/image-icons.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="appointment-edit-dialog.html">
 <link rel="import" href="shared-styles.html">
 
@@ -40,16 +42,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }*/
     </style>
     
+    <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
     <style is="custom-style" include="shared-styles"></style>
     
     <!-- The with-backdrop option makes the background darker when dialog is shown, not sure if it makes it modal -->
     <paper-dialog class="dialog" id="details" no-overlap entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-      <h2>Détails</h2>
+      <div class="layout horizontal center">
+        <h2 class="flex">Détails</h2>
+        <paper-icon-button icon="cancel" title="Close" on-tap="close"></paper-icon-button>
+      </div>
       <p>
         <b>Date: </b>{{date}}
       </p>
       <p>
-        {{startTime}}
+        <b>Starting at: </b>{{startTime}}
       </p>
       <p>
         <template is="dom-if" if="{{location}}">
@@ -171,6 +177,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _blocsChanged: function() {
         this._updateView();
+      },
+      close: function() {
+        this.$.details.close();
       }
       
     });
