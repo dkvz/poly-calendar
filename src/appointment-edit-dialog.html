@@ -13,6 +13,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="appointment-edit-dialog">
@@ -35,6 +39,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </template>
         <paper-input label="Nom" id="inputName" value="{{displayedName}}"></paper-input>
         <paper-input label="Localisation" id="inputLocation" value="{{location}}"></paper-input>
+        
+        <paper-dropdown-menu label="Type de rendez-vous" id="appointmentType">
+          <paper-listbox class="dropdown-content" selected="{{typeSelectedId}}">
+            <!-- The paper-item should be colored according to the appointment type color -->
+            <!-- OK I kinda did and it doesn't look that great... -->
+            <paper-item>Normal</paper-item>
+            <paper-item style="background-color: red">Privé</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
         <br />
         <div>
           Nombre de blocs (par demi-heure): <b>{{blocs}}</b>&nbsp;
@@ -44,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-icon-button icon="indeterminate-check-box" title="Remove" on-tap="removeBloc"></paper-icon-button>
         </div>
         <!-- I need a delete button if a displayedName exists -->
-        <br />
+        
         <hr width="100%" />
         <div class="layout horizontal end-justified">
           <!-- I need a delete button if a displayedName exists -->
@@ -122,6 +135,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           notify: true,
           value: 'white'
+        },
+        typeSelectedId: {
+          type: Number,
+          notify: true,
+          value: 0
         }
         
       },
