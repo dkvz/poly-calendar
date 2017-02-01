@@ -117,10 +117,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 location="[[hours.location]]" 
                 color="[[hours.color]]" 
                 start-time="[[hours.start]]" 
+                type="[[hours.type]]"
                 date="[[days.date]]"
                 data="{{originalData}}"
                 view-element="[[viewElement]]"
-                modified="{{modified}}">
+                modified="{{modified}}"
+                appointment-types="{{appointmentTypes}}">
               </calendar-appointment>
             </template>
           </div>
@@ -180,6 +182,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           notify: true,
           value: true
+        },
+        appointmentTypes: {
+          type: Array,
+          notify: true,
+          value: []
         }
 
       },
@@ -260,6 +267,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           //this.originalData.push(e.detail.response.days[i]);
           this.push('originalData', e.detail.response.days[i]);
           this.reducedData.push(e.detail.response.days[i]);
+        }
+        // Save the appointment types:
+        if (e.detail.response.appointmentTypes) {
+          console.log('Saving appointment types...');
+          this.appointmentTypes = e.detail.response.appointmentTypes;
         }
         this.previousWidth = -1;
         this._onListResize();

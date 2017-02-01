@@ -43,9 +43,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-dropdown-menu label="Type de rendez-vous" id="appointmentType">
           <paper-listbox class="dropdown-content" selected="{{typeSelectedId}}">
             <!-- The paper-item should be colored according to the appointment type color -->
-            <!-- OK I kinda did and it doesn't look that great... -->
+            <!-- OK I kinda did and it doesn't look that great... 
             <paper-item>Normal</paper-item>
-            <paper-item style="background-color: red">Privé</paper-item>
+            <paper-item style="background-color: red">Privé</paper-item> -->
+            <template is="dom-repeat" items="{{appointmentTypes}}">
+              <paper-item style="background-color: {{item.color}}">{{item.type}}</paper-item>
+            </template>
           </paper-listbox>
         </paper-dropdown-menu>
         <br />
@@ -140,6 +143,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           notify: true,
           value: 0
+        },
+        appointmentTypes: {
+          type: Array,
+          notify: true
         }
         
       },

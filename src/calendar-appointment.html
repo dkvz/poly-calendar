@@ -58,6 +58,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <b>Starting at: </b>{{startTime}}
       </p>
       <p>
+        <b>Type: </b>{{type}}
+      </p>
+      <p>
         <template is="dom-if" if="{{location}}">
           <b>Localisation:&nbsp</b>{{location}}
         </template>
@@ -74,7 +77,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       data="{{data}}"
       view-element="[[viewElement]]"
       modified="{{modified}}"
-      color="{{color}}">
+      color="{{color}}"
+      appointment-types="{{appointmentTypes}}">
     </appointment-edit-dialog>
     
     <div id="appoint" on-tap="showDetails">
@@ -115,6 +119,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           notify: true
         },
+        type: {
+          type: String,
+          notify: true
+        },
         /**
           How many blocks we have (i.e. how "long" this appointment is)
         **/
@@ -152,6 +160,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         modified: {
           type: Boolean,
+          notify: true
+        },
+        appointmentTypes: {
+          type: Array,
           notify: true
         }
         
