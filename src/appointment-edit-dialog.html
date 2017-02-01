@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-input label="Localisation" id="inputLocation" value="{{location}}"></paper-input>
         
         <paper-dropdown-menu label="Type de rendez-vous" id="appointmentType">
-          <paper-listbox class="dropdown-content" selected="{{typeSelectedId}}">
+          <paper-listbox class="dropdown-content" selected="{{typeSelectedId}}" id="typeList">
             <!-- The paper-item should be colored according to the appointment type color -->
             <!-- OK I kinda did and it doesn't look that great... 
             <paper-item>Normal</paper-item>
@@ -101,6 +101,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         originalData: {
           type: Object,
           notify: false
+        },
+        type: {
+          type: String,
+          notify: true
         },
         blocs: {
           type: Number,
@@ -259,7 +263,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       // I'm going to check the id.
                       if (this.data[i]['agenda'][y]['id'] || this.data[i]['agenda'][y]['id'] > 0) {
                         // There is an appointment here.
-                        console.log('Overlap: one of the following blocs has an non null id');
                         this.warningMessage = 'This appointment is overlapping with another.';
                         return;
                       } else {
@@ -292,6 +295,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   
                   this.saveOriginalData();
                 }
+                this._saveType();
                 break;
               }
             }
@@ -303,12 +307,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       attached: function() {
         this.saveOriginalData();
+        this._setDropdownPosition();
+      },
+      _setDropdownPosition: function() {
+        for (var i = 0; i < this.appointmentTypes.length; i++) {
+          if (this.appointmentTypes[i].type === this.type) {
+            this.typeSelectedId = i;
+            break;
+          }
+        }
+      },
+      _saveType: function() {
+        var index = this.$.typeList.selected;
+        this.type = this.appointmentTypes[index].type;
+        this.color = this.appointmentTypes[index].color;
       },
       saveOriginalData: function() {
         this.originalData = {
           location: this.location,
           displayedName: this.displayedName,
-          blocs: this.blocs
+          blocs: this.blocs,
+          type: this.type
         };
       },
       remove: function() {
@@ -355,6 +374,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.displayedName = this.originalData.displayedName;
         this.blocs = this.originalData.blocs;
         this.location = this.originalData.location;
+        this.type = this.originalData.type;
         this.close();
       },
       close: function() {
