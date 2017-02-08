@@ -122,7 +122,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 data="{{originalData}}"
                 view-element="[[viewElement]]"
                 modified="{{modified}}"
-                appointment-types="{{appointmentTypes}}">
+                appointment-types="{{appointmentTypes}}"
+                reminder-email="[[hours.reminderEmail]]"
+                reminder-sms="[[hours.reminderSms]]">
               </calendar-appointment>
             </template>
           </div>
@@ -187,6 +189,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Array,
           notify: true,
           value: []
+        },
+        prevResizeStamp: {
+          type: Number,
+          notify: false,
+          value: 0
         }
 
       },
@@ -199,10 +206,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.viewElement = this;
         //this.$.theList.addEventListener('iron-resize', this._onListResize.bind(this));
       },
-      _onListResize: function() {
-        console.log('List resize fired.');
+      _onListResize: function(e) {
         if (this.originalData) {
-          //console.log('Original data not empty.');
           var w = this.$.listArea.offsetWidth;
           if (Math.abs(w - this.previousWidth) >= this.listItemWidth) {
             this.previousWidth = w;
@@ -260,11 +265,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       saveOriginalData: function(e) {
         console.log('Saving original data...');
-        //this.originalData = new Array();
         this.splice('originalData', 0, this.originalData.length);
         this.reducedData = new Array();
         for (var i = 0; i < e.detail.response.days.length; i++) {
-          //this.originalData.push(e.detail.response.days[i]);
           this.push('originalData', e.detail.response.days[i]);
           this.reducedData.push(e.detail.response.days[i]);
         }

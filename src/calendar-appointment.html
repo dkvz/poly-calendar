@@ -79,7 +79,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       modified="{{modified}}"
       color="{{color}}"
       type="{{type}}"
-      appointment-types="{{appointmentTypes}}">
+      appointment-types="{{appointmentTypes}}"
+      reminder-email="{{reminderEmail}}"
+      reminder-sms="{{reminderSms}}">
     </appointment-edit-dialog>
     
     <div id="appoint" on-tap="showDetails">
@@ -166,6 +168,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         appointmentTypes: {
           type: Array,
           notify: true
+        },
+        reminderEmail: {
+          type: Boolean,
+          notify: true,
+          value: false
+        },
+        reminderSms: {
+          type: Boolean,
+          notify: true,
+          value: false
         }
         
       },

@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="appointment-edit-dialog">
@@ -59,7 +60,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-icon-button icon="add-box" title="Add" on-tap="addBloc"></paper-icon-button>
           <paper-icon-button icon="indeterminate-check-box" title="Remove" on-tap="removeBloc"></paper-icon-button>
         </div>
-        <!-- I need a delete button if a displayedName exists -->
+        <br />
+        <div>Rappel:</div>
+        <div class="layout horizontal around-justified">
+          <paper-checkbox checked="{{reminderEmail}}">Par Email</paper-checkbox>
+          <paper-checkbox checked="{{reminderSms}}">Par SMS</paper-checkbox>
+        </div>
         
         <hr width="100%" />
         <div class="layout horizontal end-justified">
@@ -151,6 +157,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         appointmentTypes: {
           type: Array,
           notify: true
+        },
+        reminderEmail: {
+          type: Boolean,
+          notify: true,
+          value: false
+        },
+        reminderSms: {
+          type: Boolean,
+          notify: true,
+          value: false
         }
         
       },
