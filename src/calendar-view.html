@@ -17,6 +17,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="calendar-appointment.html">
 
@@ -74,6 +77,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           width: 80px;
           margin: 0px;
         }
+        #topBar {
+          display: none;
+        }
       }
       
       @media (min-width: 601px) {
@@ -93,6 +99,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-ajax url="data.json" last-response="{{data}}" on-response="saveOriginalData" auto></iron-ajax>
 
+    <paper-material style="width: 100%" id="topBar">
+      <div class="horizontal end-justified layout">
+        <paper-button raised on-tap="previousClicked"><iron-icon icon="image:navigate-before"></iron-icon>Précédent</paper-button>
+        <paper-button raised on-tap="nextClicked"><iron-icon icon="image:navigate-next"></iron-icon>Suivant</paper-button>
+      </div>
+    </paper-material>
+    
     <div id="listArea" class="layout left-justified horizontal">
       <paper-material class="timeTab" elevation="4">
         <template is="dom-if" if="{{syncing}}">
@@ -108,15 +121,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-material>
       
       <template is="dom-repeat" items="{{reducedData}}" as="days" id="cal">
-        <paper-material class="dayTab" elevation="3">
+        <paper-material class="dayTab" elevation="3" on-track="handleTrack">
           <h1>[[days.day]] - [[days.date]]</h1>
           <div class="layout vertical timeColumn">
             <template is="dom-repeat" items="{{days.agenda}}" as="hours" id="calDay">
               <calendar-appointment blocs="[[hours.blocs]]" 
-                displayed-name="[[hours.name]]" 
-                location="[[hours.location]]" 
-                color="[[hours.color]]" 
-                start-time="[[hours.start]]" 
+                displayed-name="[[hours.name]]"
+                location="[[hours.location]]"
+                color="[[hours.color]]"
+                start-time="[[hours.start]]"
                 type="[[hours.type]]"
                 date="[[days.date]]"
                 data="{{originalData}}"
@@ -311,6 +324,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.async(this._produceResizedListNoW, 500);
           this.modified = false;
         }
+      },
+      handleTrack: function(e) {
+        if (e.detail.state == 'end') {
+          console.log(e);
+        }
+      },
+      nextClicked: function() {
+        console.log('Clicked next');
+      },
+      previousClicked: function() {
+        console.log('Clicked previous');
       }
 
     });
