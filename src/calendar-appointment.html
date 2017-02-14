@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="appointment-edit-dialog.html">
+<link rel="import" href="person-details.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="calendar-appointment">
@@ -41,10 +42,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         bottom: 6px;
       }*/
     </style>
-    
+
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
     <style is="custom-style" include="shared-styles"></style>
-    
+
     <!-- The with-backdrop option makes the background darker when dialog is shown, not sure if it makes it modal -->
     <paper-dialog class="dialog" id="details" no-overlap entry-animation="scale-up-animation" exit-animation="fade-out-animation">
       <div class="layout horizontal center">
@@ -52,28 +53,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-icon-button icon="cancel" title="Close" on-tap="close"></paper-icon-button>
       </div>
       <p>
-        <b>Date: </b>{{date}}
+        <b>Name:&nbsp;</b>
+        <a on-tap="showPersonDetails" href="">{{displayedName}}</a>
       </p>
       <p>
-        <b>Starting at: </b>{{startTime}}
+        <b>Date:&nbsp;</b>{{date}}
       </p>
       <p>
-        <b>Type: </b>{{type}}
+        <b>Starting at:&nbsp;</b>{{startTime}}
+      </p>
+      <p>
+        <b>Type:&nbsp;</b>{{type}}
       </p>
       <p>
         <template is="dom-if" if="{{location}}">
-          <b>Localisation:&nbsp</b>{{location}}
+          <b>Localisation:&nbsp;</b>{{location}}
         </template>
         <div>
           <paper-fab icon="image:edit" on-tap="edit"></paper-fab>
         </div>
       </p>
     </paper-dialog>
-    <appointment-edit-dialog 
-      id="editDialog" date="{{date}}" 
-      displayed-name="{{displayedName}}" 
-      location="{{location}}" blocs="{{blocs}}" 
-      start-time="{{startTime}}" 
+    <paper-dialog class="dialog" id="personDetails">
+      <person-details edit-mode firstName="Test name" lastName="Test last name"></person-details>
+    </paper-dialog>
+    <appointment-edit-dialog
+      id="editDialog" date="{{date}}"
+      displayed-name="{{displayedName}}"
+      location="{{location}}" blocs="{{blocs}}"
+      start-time="{{startTime}}"
       data="{{data}}"
       view-element="[[viewElement]]"
       modified="{{modified}}"
@@ -83,29 +91,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       reminder-email="{{reminderEmail}}"
       reminder-sms="{{reminderSms}}">
     </appointment-edit-dialog>
-    
+
     <div id="appoint" on-tap="showDetails">
       {{displayedName}}
-      <!--
-      <template is="dom-if" if="{{location}}">
-        <div class="location">
-          <hr width="20%" />
-          {{location}}
-        </div>
-      </template>
-      -->
     </div>
-    
+
   </template>
-  
+
     <script>
 
     Polymer({
 
       is: 'calendar-appointment',
-      
+
       properties: {
-        
+
         displayedName: {
           type: String,
           notify: true
@@ -179,7 +179,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           notify: true,
           value: false
         }
-        
+
       },
       attached: function() {
         this._updateView();
@@ -205,10 +205,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       close: function() {
         this.$.details.close();
+      },
+      showPersonDetails: function() {
+        this.$.personDetails.toggle();
       }
-      
+
     });
 
   </script>
-  
+
 </dom-module>
