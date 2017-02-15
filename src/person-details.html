@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
@@ -22,9 +23,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
     <style>
+      :host {
+        --paper-input-container: {
+          margin: 0;
+        };
+      }
       .diag {
         padding: 4px 24px 4px 24px;
         margin: 0;
+      }
+
+      h2 {
+        margin-bottom: 0;
       }
     </style>
 
@@ -45,12 +55,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-input label="Tél. Bureau" value="{{phoneWork}}"></paper-input>
         <paper-input label="Email" value="{{email}}"></paper-input>
         <paper-dropdown-menu label="Langue">
-          <paper-listbox class="dropdown-content" selected="1">
+          <paper-listbox class="dropdown-content" selected="0">
             <paper-item>Français</paper-item>
             <paper-item>Néerlandais</paper-item>
             <paper-item>Anglais</paper-item>
           </paper-listbox>
         </paper-dropdown-menu>
+        <template is="dom-if" if="{{editControls}}">
+          <div class="layout horizontal end-justified">
+            <paper-icon-button icon="save" title="Save" on-tap="save"></paper-icon-button>
+            <paper-icon-button icon="cancel" title="Cancel" on-tap="cancel"></paper-icon-button>
+          </div>
+        </template>
+      </template>
+      <template is="dom-if" if="{{!editMode}}">
+        <p>
+          <b>Nom:&nbsp;</b>{{lastName}}
+        </p>
+        <p>
+          <b>Prénom:&nbsp;</b>{{firstName}}
+        </p>
+        <p>
+          <b>Date de naissance:&nbsp;</b>{{birthday}}
+        </p>
+        <p>
+          <b>Tél. Mobile:&nbsp;</b>{{phoneMobile}}
+        </p>
+        <p>
+          <b>Tél. Domicile:&nbsp;</b>{{phoneHome}}
+        </p>
+        <p>
+          <b>Tél. Bureau:&nbsp;</b>{{phoneWork}}
+        </p>
+        <p>
+          <b>Email:&nbsp;</b>{{email}}
+        </p>
+        <p>
+          <b>Langue:&nbsp;</b>{{language}}
+        </p>
       </template>
     </div>
 
@@ -65,6 +107,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
 
         editMode: {
+          type: Boolean,
+          notify: true,
+          value: false
+        },
+        editControls: {
           type: Boolean,
           notify: true,
           value: false
@@ -85,10 +132,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         birthdate: {
           type: Date,
           notify: true
+        },
+        language: {
+          type: String,
+          notify: true
         }
 
       },
       save: function() {
+        console.log('Saving the details about this person.');
+      },
+      cancel: function() {
 
       },
       attached: function() {

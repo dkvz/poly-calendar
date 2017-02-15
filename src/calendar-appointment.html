@@ -54,7 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <p>
         <b>Name:&nbsp;</b>
-        <a on-tap="showPersonDetails" href="">{{displayedName}}</a>
+        <a id="detailsLink" on-tap="showPersonDetails" href="">{{displayedName}}</a>
       </p>
       <p>
         <b>Date:&nbsp;</b>{{date}}
@@ -75,7 +75,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </p>
     </paper-dialog>
     <paper-dialog class="dialog" id="personDetails">
-      <person-details edit-mode firstName="Test name" lastName="Test last name"></person-details>
+      <person-details id="personDetailsEl" edit-mode="{{personEditMode}}" first-name="Test name" last-name="Test last name"></person-details>
+      <template is="dom-if" if="{{personEditMode}}">
+        <div class="layout horizontal end-justified" style="margin-top: 0">
+          <paper-icon-button icon="save" title="Save" on-tap="savePersonDetails"></paper-icon-button>
+          <paper-icon-button icon="cancel" title="Cancel" on-tap="cancelPersonDetails"></paper-icon-button>
+        </div>
+      </template>
+      <template is="dom-if" if="{{!personEditMode}}">
+        <div class="layout horizontal end-justified" style="margin-top: 0">
+          <paper-icon-button icon="image:edit" title="Edit" on-tap="editPersonDetails"></paper-icon-button>
+          <paper-icon-button icon="cancel" title="Cancel" on-tap="cancelPersonDetails"></paper-icon-button>
+        </div>
+      </template>
     </paper-dialog>
     <appointment-edit-dialog
       id="editDialog" date="{{date}}"
@@ -178,6 +190,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           notify: true,
           value: false
+        },
+        personEditMode: {
+          type: Boolean,
+          notify: true,
+          value: false
         }
 
       },
@@ -207,7 +224,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.details.close();
       },
       showPersonDetails: function() {
+        //this.$.personDetails.positionTarget = this.$.detailsLink;
         this.$.personDetails.toggle();
+      },
+      savePersonDetails: function() {
+        this.$.personDetailsEl.save();
+      },
+      cancelPersonDetails: function() {
+        this.$.personDetails.close();
+        this.personEditMode = false;
+      },
+      editPersonDetails: function() {
+        this.personEditMode = true;
       }
 
     });
