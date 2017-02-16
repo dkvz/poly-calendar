@@ -32,9 +32,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 4px 24px 4px 24px;
         margin: 0;
       }
-
       h2 {
         margin-bottom: 0;
+      }
+      paper-date-picker-item {
+        margin-top: 10px;
       }
     </style>
 
@@ -49,7 +51,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <template is="dom-if" if="{{editMode}}">
         <paper-input label="Nom" value="{{lastName}}"></paper-input>
         <paper-input label="Prénom" value="{{firstName}}"></paper-input>
-        <paper-date-picker-item icon="icons:today" date="{{birthdate}}" date-format="ll"></paper-date-picker-item>
+        <paper-date-picker-item icon="icons:today" date="{{birthdate}}" date-format="ll" placeholder="Date de naissance">
+        </paper-date-picker-item>
         <paper-input label="Tél. Mobile" value="{{phoneMobile}}"></paper-input>
         <paper-input label="Tél. Domicile" value="{{phoneHome}}"></paper-input>
         <paper-input label="Tél. Bureau" value="{{phoneWork}}"></paper-input>
