@@ -31,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
       }
-      
+
       h1 {
         font-size: 22px;
         margin: 16px 0;
@@ -52,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 16px;
       }
       .timeColumn {
-        
+
       }
       .titleColumn {
         /*margin-top: 32px;*/
@@ -67,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom: 4px solid silver;
         height: 36px;
       }
-      
+
       @media (max-width: 600px) {
         .dayTab {
           width: 100%;
@@ -81,7 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           display: none;
         }
       }
-      
+
       @media (min-width: 601px) {
         .dayTab {
           width: 300px;
@@ -93,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
     </style>
-    
+
     <style is="custom-style" include="shared-styles"></style>
     <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
 
@@ -105,8 +105,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-button raised on-tap="nextClicked"><iron-icon icon="image:navigate-next"></iron-icon>Suivant</paper-button>
       </div>
     </paper-material>
-    
-    <div id="listArea" class="layout left-justified horizontal">
+
+    <div id="listArea" class="layout left-justified horizontal" on-track="handleTrack">
       <paper-material class="timeTab" elevation="4">
         <template is="dom-if" if="{{syncing}}">
           <paper-spinner active alt="Loading..."></paper-spinner>
@@ -119,13 +119,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </template>
         </div>
       </paper-material>
-      
+
       <template is="dom-repeat" items="{{reducedData}}" as="days" id="cal">
-        <paper-material class="dayTab" elevation="3" on-track="handleTrack">
+        <paper-material class="dayTab" elevation="3">
           <h1>[[days.day]] - [[days.date]]</h1>
           <div class="layout vertical timeColumn">
             <template is="dom-repeat" items="{{days.agenda}}" as="hours" id="calDay">
-              <calendar-appointment blocs="[[hours.blocs]]" 
+              <calendar-appointment blocs="[[hours.blocs]]"
                 displayed-name="[[hours.name]]"
                 location="[[hours.location]]"
                 color="[[hours.color]]"
@@ -152,11 +152,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 
       is: 'calendar-view',
-      
+
       behaviors: [
         Polymer.IronResizableBehavior
       ],
-      
+
       properties: {
 
         data: {
@@ -210,11 +210,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
       },
-      
+
       listeners: {
         'iron-resize': '_onListResize'
       },
-      
+
+      ready: function() {
+        this.setScrollDirection('y', this.$.listArea);
+      },
       attached: function() {
         this.viewElement = this;
         //this.$.theList.addEventListener('iron-resize', this._onListResize.bind(this));
@@ -294,7 +297,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.syncing = false;
       },
       testFunc: function() {
-        console.log('Called test function.');  
+        console.log('Called test function.');
       },
       _reconcileAgendas: function() {
         var arr = Polymer.dom(this.root).querySelectorAll('#calDay');
