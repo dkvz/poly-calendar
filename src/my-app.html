@@ -100,6 +100,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
           <calendar-view name="cal" id="calView"></calendar-view>
+          <login-view name="login" id="loginView"
+            page="{{page}}"
+            page-to-redirect-to="cal"
+            authenticated="{{authenticated}}"
+            creds="{{creds}}">
+          </login-view>
         </iron-pages>
 
       </app-header-layout>
@@ -121,6 +127,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           reflectToAttribute: true,
           observer: '_pageChanged'
         },
+        authenticated: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        creds: {
+          type: Object,
+          notify: true,
+          value: {user: '', password: ''}
+        }
 
       },
 
@@ -129,17 +145,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'cal';
+        if (!this.authenticated) {
+          this.page = 'login';
+        } else {
+          this.page = page || 'cal';
+        }
       },
       _pageChanged: function(page) {
         // load page import on demand.
-        if (page === 'cal') {
+        if (page === 'login') {
+          // Show login page
+          this.importHref(
+          this.resolveUrl('login-view.html'), null, null, true);
+          document.title = 'Appointments - Login';
+        } else if (page === 'cal') {
           this.importHref(
           this.resolveUrl('calendar-view.html'), null, null, true);
           document.title = 'Appointments - Calendar View';
         } else {
           document.title = 'Appointments';
         }
+
       }
 
     });
